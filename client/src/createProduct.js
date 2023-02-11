@@ -21,6 +21,25 @@ function CreateProduct() {
    // function addProduct() {
    //    Axios.post('http://localhost:3002/api/create', { sku: sku, name: name, price: price, size: size, weight: weight, dimensions: dimensions });
    // }
+
+   useEffect(() => {
+      document.getElementById('productType').addEventListener('change', function () {
+         if (this.value == 'DVD') {
+            document.getElementById("DVD").classList.remove("d-none")
+            document.getElementById("Furniture").classList.add("d-none")
+            document.getElementById("Book").classList.add("d-none")
+         } else if (this.value == 'Furniture') {
+            document.getElementById("Furniture").classList.remove("d-none")
+            document.getElementById("DVD").classList.add("d-none")
+            document.getElementById("Book").classList.add("d-none")
+         } else if (this.value == 'Book') {
+            document.getElementById("Book").classList.remove("d-none")
+            document.getElementById("Furniture").classList.add("d-none")
+            document.getElementById("DVD").classList.add("d-none")
+         }
+      });
+   })
+
    return (
       <div>
          <div>
@@ -72,14 +91,14 @@ function CreateProduct() {
                   </select>
                </div>
 
-               <div id='DVD' className='row mb-3'>
+               <div id='DVD' className='row mb-3  d-none'>
                   <label className='col-4'>Size (MB): </label>
                   <input id='size' className='col-8' type="text" onChange={(e) => {
                      setSize(e.target.value)
                   }}></input>
                </div>
 
-               <div id='Furniture'>
+               <div id='Furniture' className='d-none'>
                   <div className='row mb-3'>
                      <label className='col-4'>Height: </label>
                      <input id='height' className='col-8' type="text" onChange={(e) => {
@@ -99,7 +118,7 @@ function CreateProduct() {
                      }}></input>
                   </div>
                </div>
-               <div id='Book' className='row mb-3'>
+               <div id='Book' className='row mb-3 d-none'>
                   <label className='col-4'>Weight (KG): </label>
                   <input id='weight' className='col-8' type="text" onChange={(e) => {
                      setWeight(e.target.value)
