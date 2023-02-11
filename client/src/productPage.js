@@ -1,17 +1,46 @@
-import React from 'react'
+import Axios from 'axios';
+import React, { useState, useEffect } from 'react'
 import { Component } from 'react';
 import Product from './product';
+import Footer from './footer';
 
+function ProductPage() {
 
-class ProductPage extends Component {
-   render() {
-      return (
-         <div>
-            <NavBar />
-            <ProductGrid />
-            <Footer />
+   const [products, setProducts] = useState([]);
+
+   useEffect(() => {
+      Axios.get("http://localhost:3002/api/get").then((response) => {
+         setProducts(response.data)
+      });
+   }, [])
+
+   return (
+      <div>
+         <NavBar />
+         <div className="row justify-content-center">
+            {products.map((product) => {
+               return (
+                  <Product {...product} />
+               )
+            })}
          </div>
-      )
+         <Footer />
+      </div>
+   );
+}
+
+const deleteAll = async () => {
+   // make an array of the checked checkboxes values
+   //let ids = [];
+
+   let checkboxes = document.getElementsByClassName('form-check-input');
+
+   for (var i = 0; i < checkboxes.length; i++) {
+      if (checkboxes[i].checked == true) {
+         //ids.push(checkboxes[i].value);
+         Axios.post('http://localhost:3002/api/delete/', { SKU: checkboxes[i].value });
+         console.log(checkboxes[i].value)
+      }
    }
 }
 
@@ -24,48 +53,15 @@ class NavBar extends Component {
                   <h1 className='ps-3'>Product List</h1>
                </div>
                <div className='d-flex justify-content-end col-6 my-auto'>
-                  <a href='/add-product' class='btn btn-outline-primary me-3'> ADD</a>
-                  <a href='/back' class="btn btn-outline-primary me-3"> MASS DELETE</a>
+                  <a href='/add-product' className='btn btn-outline-primary me-3'> ADD</a>
+                  <button onClick={deleteAll} className="btn btn-outline-primary me-3 delete-checkbox"> MASS DELETE</button>
                </div>
             </div>
             <div>
                <hr className='m-3'></hr>
             </div>
          </div >
-
-      )
-   }
-}
-
-class ProductGrid extends Component {
-   constructor(props) {
-      super(props);
-      this.state = { products: [{ sku: "123", name: "test", size: "700", price: "50" }, { sku: "123", name: "test", size: "700", price: "50" }, { sku: "123", name: "test", size: "700", price: "50" }, { sku: "123", name: "test", size: "700", price: "50" }] };
-   }
-   render() {
-      let createProducts = this.state.products.map(function iterator(product) {
-         return <Product {...product} />;
-      });
-
-      return (
-         <div className="row justify-content-center">
-            {createProducts}
-         </div>
       );
-   }
-}
-
-class Footer extends Component {
-   render() {
-      return (
-         <div>
-            <div>
-               <hr className='m-3'></hr>
-            </div>
-            <div className='text-center'>
-               <h5>Scandiweb Test assignment</h5>
-            </div>
-         </div>)
    }
 }
 
