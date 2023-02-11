@@ -8,7 +8,7 @@ import './index.css';
 //import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import ProductPage from './product'
+import ProductPage from './productPage'
 import CreateProduct from './createProduct';
 
 
