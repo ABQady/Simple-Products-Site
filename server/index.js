@@ -27,7 +27,7 @@ app.post('/api/create', (req, res) => {
    const weight = req.body.weight;
    const dimensions = req.body.dimensions;
 
-   db.query("INSERT INTO products (SKU, Name, Price, Size, Weight, Dimensions) VALUES (?,?,?)", [sku, name, price, size, weight, dimensions], (err, result) => {
+   db.query("INSERT INTO products (SKU, Name, Price, Size, Weight, Dimensions) VALUES (?,?,?,?,?,?)", [sku, name, price, size, weight, dimensions], (err, result) => {
       if (err) {
          console.log(err)
       }
@@ -36,10 +36,10 @@ app.post('/api/create', (req, res) => {
 })
 
 // Route to delete a product
-app.delete('/api/delete/:sku', (req, res) => {
-   const id = req.params.sku;
+app.post('/api/delete', (req, res) => {
+   const SKU = req.body.SKU;
 
-   db.query("DELETE FROM products WHERE SKU= ?", sku, (err, result) => {
+   db.query("DELETE FROM products WHERE SKU = ?", SKU, (err, result) => {
       if (err) {
          console.log(err)
       }
