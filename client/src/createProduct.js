@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import Axios from 'axios'
 import './App.css'
 import Footer from './footer';
@@ -17,12 +17,6 @@ function CreateProduct() {
    const [width, setWidth] = useState("0");
    const [length, setLength] = useState("0");
    const [dimensions, setDimensions] = useState("");
-
-   // const addProduct = () => {
-   //    Axios.post('http://localhost:3002/api/create', { sku: sku, name: name, price: price, size: size, weight: weight, dimensions: dimensions });
-   //    //window.open("/");
-   //    //window.location.href = '/';
-   // }
 
    function validateForm() {
       var fsku = document.forms["product_form"]["sku"].value;
@@ -92,14 +86,16 @@ function CreateProduct() {
       else return true;
 
    }
-
+   const navigate = useNavigate();
    function addProduct() {
       var dim = height + "x" + width + "x" + length;
+
       console.log(dim);
       setDimensions(dim);
       console.log(dimensions)
       if (validateForm()) {
          Axios.post('http://localhost:3002/api/create', { sku: sku, name: name, price: price, size: size, weight: weight, dimensions: dimensions, type: switcher });
+         navigate('/', { replace: true });
       }
    }
 
@@ -133,7 +129,7 @@ function CreateProduct() {
                <div className='d-flex justify-content-end col-6 my-auto'>
                   <button
                      onClick={() => {
-                        addProduct()
+                        addProduct();
                      }}
                      className='btn btn-outline-primary me-3'> Save</button>
                   <a href='/' className="btn btn-outline-primary me-3"> Cancel</a>
@@ -188,7 +184,7 @@ function CreateProduct() {
                         <label htmlFor='length' className='col-4'>Length: </label>
                         <input id='length' className='col-8' type="text" onChange={(e) => { setLength(e.target.value) }}></input>
                      </div>
-                     <label className='col-12 text-center mt-2'>Please, provide dimensions in HxWxL format </label>
+                     <label className='col-12 text-center mt-2'>Please, provide dimensions </label>
                   </div>
                   <div id='Book' className='row mb-3 d-none'>
                      <label htmlFor='weight' className='col-4'>Weight (KG): </label>

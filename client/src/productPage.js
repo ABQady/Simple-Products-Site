@@ -1,8 +1,10 @@
 import Axios from 'axios';
 import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Component } from 'react';
 import Product from './product';
 import Footer from './footer';
+import { Button } from 'bootstrap';
 
 function ProductPage() {
 
@@ -29,23 +31,21 @@ function ProductPage() {
    );
 }
 
-const deleteAll = async () => {
-   // make an array of the checked checkboxes values
-   //let ids = [];
-
-   let checkboxes = document.getElementsByClassName('form-check-input');
-
-   for (var i = 0; i < checkboxes.length; i++) {
-      if (checkboxes[i].checked == true) {
-         //ids.push(checkboxes[i].value);
-         Axios.post('http://localhost:3002/api/delete/', { SKU: checkboxes[i].value });
-         console.log(checkboxes[i].value)
-      }
-   }
-}
-
 class NavBar extends Component {
+
    render() {
+
+      function deleteAll() {
+         let checkboxes = document.getElementsByClassName('form-check-input');
+
+         for (var i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked == true) {
+               Axios.post('http://localhost:3002/api/delete/', { SKU: checkboxes[i].value });
+               console.log(checkboxes[i].value)
+            }
+         }
+         window.location.href = '/';
+      }
       return (
          <div>
             <div className='d-flex flex-row pt-5'>
