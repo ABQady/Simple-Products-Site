@@ -26,8 +26,9 @@ app.post('/api/create', (req, res) => {
    const size = req.body.size;
    const weight = req.body.weight;
    const dimensions = req.body.dimensions;
+   const type = req.body.type;
 
-   db.query("INSERT INTO products (SKU, Name, Price, Size, Weight, Dimensions) VALUES (?,?,?,?,?,?)", [sku, name, price, size, weight, dimensions], (err, result) => {
+   db.query("INSERT INTO products (SKU, Name, Price, Size, Weight, Dimensions, Type) VALUES (?,?,?,?,?,?,?)", [sku, name, price, size, weight, dimensions, type], (err, result) => {
       if (err) {
          console.log(err)
       }
