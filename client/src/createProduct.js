@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Axios from 'axios'
 import './App.css'
 import Footer from './footer';
@@ -16,7 +16,7 @@ function CreateProduct() {
    const [height, setHeight] = useState("0");
    const [width, setWidth] = useState("0");
    const [length, setLength] = useState("0");
-   const [dimensions, setDimensions] = useState("");
+   const [dimensions, setDimensions] = useState("0");
 
    function validateForm() {
       var fsku = document.forms["product_form"]["sku"].value;
@@ -33,12 +33,12 @@ function CreateProduct() {
 
       if (fsku == "") {
          missingFlag = true;
-      } else if (!/^[0-9]+$/i.test(fsku)) {
+      } else if (!/^[A-Z0-9._%+-]+$/i.test(fsku)) {
          errorFlag = true;
       }
       if (fname == "") {
          missingFlag = true;
-      } else if (!/^[A-Z0-9._%+-]+$/i.test(fname)) {
+      } else if (!/^[A-Z0-9._%+-\s]+$/i.test(fname)) {
          errorFlag = true;
       }
       if (fprice == "") {
@@ -86,18 +86,30 @@ function CreateProduct() {
       else return true;
 
    }
-   const navigate = useNavigate();
-   function addProduct() {
-      var dim = height + "x" + width + "x" + length;
+   async function timeout(delay) {
+      return new Promise(res => setTimeout(res, delay));
+   }
 
-      console.log(dim);
-      setDimensions(dim);
-      console.log(dimensions)
+   const navigate = useNavigate();
+
+   async function addProduct() {
       if (validateForm()) {
-         Axios.post('http://localhost:3002/api/create', { sku: sku, name: name, price: price, size: size, weight: weight, dimensions: dimensions, type: switcher });
-         navigate('/', { replace: true });
+         try {
+            await Axios.post('https://server-abqady.vercel.app/create', { sku: sku, name: name, price: price, size: size, weight: weight, dimensions: dimensions, type: switcher })
+               .then(
+                  await timeout(1000)).then(
+                     navigate('/', { replace: true })
+                  );
+         } catch (e) {
+            console.log(e);
+         }
       }
    }
+
+   useEffect(() => {
+      const dim = height + "x" + width + "x" + length;
+      setDimensions(dim);
+   }, [height, width, length]);
 
    useEffect(() => {
       if (switcher == 'DVD') {
@@ -129,7 +141,7 @@ function CreateProduct() {
                <div className='d-flex justify-content-end col-6 my-auto'>
                   <button
                      onClick={() => {
-                        addProduct();
+                        addProduct().then(console.log('done'));
                      }}
                      className='btn btn-outline-primary me-3'> Save</button>
                   <a href='/' className="btn btn-outline-primary me-3"> Cancel</a>

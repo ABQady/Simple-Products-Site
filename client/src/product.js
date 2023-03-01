@@ -1,4 +1,3 @@
-import React, { useEffect } from 'react'
 import { Component } from 'react';
 
 class Product extends Component {
@@ -17,7 +16,7 @@ class Product extends Component {
 
       return (
          <div className='border p-3 m-3 col-10 col-sm-6 col-md-4 col-lg-3'>
-            <input type="checkbox" className='ms-3 form-check-input delete-checkbox' value={SKU}></input>
+            <input id='delete-checkbox' type="checkbox" className='ms-3 delete-checkbox' value={SKU}></input>
             <div className='my-auto text-center'>
                <h5>{SKU}</h5>
                <h5>{Name}</h5>
